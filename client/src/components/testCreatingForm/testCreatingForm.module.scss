@@ -1,0 +1,28 @@
+.question{
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  &_answers{
+    display:flex;
+    justify-content: space-around;
+    input{
+      max-width: 150px;
+    }
+  }
+  &_correctAnswer{
+    max-width: 100px;
+    padding:10px;
+    font-size: 22px;
+    margin-bottom: 2px;
+  }
+  &_correctAnswerBlock{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    align-items: center;
+    h5{
+      margin:0;
+    }
+  }
+ 
+}

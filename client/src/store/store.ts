@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import authorization from 'src/store/slices/authorizationSlice';
+import test from 'src/store/slices/testSlice';
 
 export const store = configureStore({
   reducer: {
     authorization,
+    test,
   },
 });
 
