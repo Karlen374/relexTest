@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import useAuthorizationServices from 'src/services/useAuthorizationService';
+import { IRegisteredUser } from 'src/types/IRegisteredUsers';
 import { IUser } from 'src/types/IUser';
 import { IUserSignInData } from 'src/types/IUserSignInData';
 import { IUserSignUpData } from 'src/types/IUserSignUpData';
@@ -8,6 +9,7 @@ interface AuthorizationState {
   signUpModal:boolean;
   signInModal:boolean;
   registeredUserData:IUser | null;
+  registeredUsers:IRegisteredUser[] | null;
   alertMessage:string
 }
 
@@ -15,6 +17,7 @@ const initialState:AuthorizationState = {
   signUpModal: false,
   signInModal: false,
   registeredUserData: null,
+  registeredUsers: null,
   alertMessage: '',
 };
 
@@ -34,7 +37,14 @@ export const signUp = createAsyncThunk(
     return response;
   },
 );
-
+export const getUsers = createAsyncThunk(
+  'authorization/getUsers',
+  async () => {
+    const { getAllUsers } = useAuthorizationServices();
+    const response = await getAllUsers();
+    return response;
+  },
+);
 const AuthorizationSlice = createSlice({
   name: 'authorization',
   initialState,
@@ -73,6 +83,9 @@ const AuthorizationSlice = createSlice({
       })
       .addCase(signUp.fulfilled, (state) => {
         state.alertMessage = 'registration completed successfully';
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.registeredUsers = action.payload;
       })
       .addCase(signUp.rejected, (state) => {
         state.alertMessage = 'please enter correct data';

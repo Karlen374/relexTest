@@ -9,5 +9,6 @@ authRouter.post('/signUp',[
   check('password',"Пароль должен быть больше 4 символов").isLength({min:4}),
 ], AuthController.registration)
 authRouter.post('/signIn', AuthController.login)
+authRouter.get('/getUsers', AuthController.getUsers);
 
 export default authRouter;

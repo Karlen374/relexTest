@@ -61,6 +61,16 @@ class AuthController {
       res.status(400).json({message: "Login Error"});
     }
   }
+  async getUsers(req, res) {
+    try {
+      const Users = await User.find()
+      return res.json(Users.map((item) => { 
+        return {id:item._id, name: item.name, email: item.email, role: item.roles[0], testsData:item.testsData}
+      }));
+    } catch (e){
+      res.status(500).json(e)
+    }
+  }
 
 }
 

@@ -2,6 +2,11 @@
   display:flex;
   justify-content: center;
   flex-direction: column;
+  &_ready{
+    h5{
+      margin:0;
+    }
+  }
   &_answers{
     display:flex;
     justify-content: space-around;
@@ -25,4 +30,31 @@
     }
   }
  
+}
+.test{
+  min-width:410px;
+  // min-height: 647px;
+  &_question{
+    border-bottom: 1px solid #CFCFCF;
+    padding-bottom: 20px;
+    max-height: 430px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+    overflow-x:hidden;
+    &::-webkit-scrollbar {
+      width: 8px;
+      background-color: rgb(225, 219, 219);
+      &-thumb {
+        background-color: rgb(106, 108, 116);
+        width: 10px;
+      }
+    }
+  }
+  &_buttons{
+    margin-top:10px;
+    display: flex;
+    justify-content: space-around;
+  }
 }

@@ -15,10 +15,14 @@ const useAuthorizationServices = () => {
     const res = await request(`${_apiBase}/signUp`, 'POST', JSON.stringify(data));
     return res;
   };
-
+  const getAllUsers = async () => {
+    const res = await request(`${_apiBase}/getUsers`, 'GET');
+    return res;
+  };
   return {
     signInUser,
     signUpUser,
+    getAllUsers,
   };
 };
 
