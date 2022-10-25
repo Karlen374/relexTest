@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AppHeader from 'src/components/appHeader/appHeader';
 import TestsPage from 'src/components/pages/TestsPage';
 import UsersPage from 'src/components/pages/UsersPage';
+import AppAlert from './appAlert';
 import styles from './app.module.scss';
 
 const App = () => {
   return (
     <Router>
       <div className={styles.App}>
+        <AppAlert />
         <AppHeader />
         <Routes>
           <Route path="/" element={<TestsPage />} />

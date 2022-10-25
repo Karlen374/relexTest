@@ -17,10 +17,15 @@ const useTestServices = () => {
     const res = await request(`${_apiBase}/changeStatus`, 'PUT', JSON.stringify({ testId: id }));
     return res;
   };
+  const delTest = async (id:string) => {
+    const res = await request(`${_apiBase}/delTest`, 'DELETE', JSON.stringify({ testId: id }));
+    return res;
+  };
   return {
     createNewTest,
     getTests,
     changeStatus,
+    delTest,
   };
 };
 

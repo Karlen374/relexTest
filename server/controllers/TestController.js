@@ -22,7 +22,6 @@ class TestController {
   }
   async changeTestStatus (req, res) {
     try {
-      console.log('check = ', req.body.testId)
       const testId = req.body.testId
       const test = (await Test.find()).filter((item) => item.id === testId)[0]
       test.status = !test.status;
@@ -30,6 +29,15 @@ class TestController {
       return res.status(200).json({id:updatedTest.id, status: updatedTest.status, name: updatedTest.name, questions: updatedTest.questions})
     } catch (e) {
       res.status(500).json(e)
+    }
+  }
+  async delTestById (req,res) {
+    try {
+      const testId = req.body.testId
+      const delTest = await Test.deleteOne({id:testId})
+      return res.status(200).json(testId)
+    } catch (e){
+      res.status(500).json(e);
     }
   }
 }

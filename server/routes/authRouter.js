@@ -10,5 +10,6 @@ authRouter.post('/signUp',[
 ], AuthController.registration)
 authRouter.post('/signIn', AuthController.login)
 authRouter.get('/getUsers', AuthController.getUsers);
+authRouter.put('/addTestResult', AuthController.addTestResult);
 
 export default authRouter;

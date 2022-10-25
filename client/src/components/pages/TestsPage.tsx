@@ -10,19 +10,26 @@ import TestPerformanceForm from 'src/components/testPerformanceForm/testPerforma
 
 const TestsPage = () => {
   const dispatch = useAppDispatch();
-  const { createTestModal, testPerformanceModal } = useAppSelector((store) => store.test);
-  const { tests } = useAppSelector((store) => store.test);
+  const { createTestModal, testPerformanceModal, tests } = useAppSelector((store) => store.test);
+  const { registeredUserData } = useAppSelector((store) => store.authorization);
   useEffect(() => {
-    const registeredUserData = localStorage.getItem('registeredUserData');
-    if (registeredUserData) {
-      dispatch(getRegisteredUserData(JSON.parse(registeredUserData)));
+    const registeredUser = localStorage.getItem('registeredUserData');
+    if (registeredUser) {
+      dispatch(getRegisteredUserData(JSON.parse(registeredUser)));
       dispatch(getAllTests());
     }
   }, []);
+  if (!registeredUserData || !tests) {
+    return (
+      <h2>
+        для получения  полного доступа нужно зарегистрироваться
+      </h2>
+    );
+  }
   return (
     <div>
       <TestHeader />
-      {tests && <TestList testsData={tests} />}
+      <TestList testsData={tests} />
       <Modal active={createTestModal}>
         <TestCreatingForm />
       </Modal>

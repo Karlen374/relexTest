@@ -1,4 +1,5 @@
 import { useHttp } from 'src/hooks/useHttp';
+import { ITestResultData } from 'src/types/ITestResultData';
 import { IUserSignInData } from 'src/types/IUserSignInData';
 import { IUserSignUpData } from 'src/types/IUserSignUpData';
 
@@ -19,10 +20,15 @@ const useAuthorizationServices = () => {
     const res = await request(`${_apiBase}/getUsers`, 'GET');
     return res;
   };
+  const addTestResult = async (testResult: ITestResultData) => {
+    const res = await request(`${_apiBase}/addTestResult`, 'PUT', JSON.stringify(testResult));
+    return res;
+  };
   return {
     signInUser,
     signUpUser,
     getAllUsers,
+    addTestResult,
   };
 };
 

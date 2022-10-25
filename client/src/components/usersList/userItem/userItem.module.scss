@@ -1,0 +1,25 @@
+.userTest{
+  &_good{
+    border:1px solid black;
+    border-radius: 10px;
+    background-color: rgb(86, 225, 90);
+    margin-bottom: 5px;
+  }
+  &_normally{
+    border:1px solid black;
+    border-radius: 10px;
+    background-color: rgb(211, 225, 86);
+    margin-bottom: 5px;
+  }
+  &_bad{
+    border:1px solid black;
+    border-radius: 10px;
+    background-color: rgb(181, 52, 33);
+    margin-bottom: 5px;
+  }
+}
+.userItem{
+  border:1px solid black;
+  padding:10px;
+  border-radius: 10px;
+}

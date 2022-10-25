@@ -71,6 +71,18 @@ class AuthController {
       res.status(500).json(e)
     }
   }
+  async addTestResult(req,res) {
+    try{
+      const testResult = req.body
+      const user = await User.findById(testResult.userId)
+      const testEndTime = String(Math.trunc((Date.parse(testResult.testEndTime) - Date.parse(testResult.testStartTime))/60000))
+      user.testsData = [...user.testsData,{...testResult, testEndTime }];
+      const updatedUser = await User.findByIdAndUpdate(user._id,user,{new:true})
+      return res.json(updatedUser);
+    } catch (e){
+      res.status(500).json(e)
+    }
+  }
 
 }
 

@@ -2,7 +2,7 @@ import { CSSTransition } from 'react-transition-group';
 import clsx from 'clsx';
 import { useAppDispatch } from 'src/hooks/hooks';
 import { closeSignInModal, closeSignUpModal } from 'src/store/slices/authorizationSlice';
-
+import { changeTestPerformanceModal } from 'src/store/slices/testSlice';
 import { ModalProps } from './modal.interface';
 import styles from './modal.module.scss';
 
@@ -11,6 +11,7 @@ const Modal = ({ active, children }:ModalProps) => {
   const close = () => {
     dispatch(closeSignUpModal());
     dispatch(closeSignInModal());
+    dispatch(changeTestPerformanceModal(false));
   };
 
   const modalClass = clsx({

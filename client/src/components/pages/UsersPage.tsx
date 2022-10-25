@@ -5,17 +5,18 @@ import { useEffect } from 'react';
 
 const UsersPage = () => {
   const dispatch = useAppDispatch();
-  const { registeredUsers } = useAppSelector((store) => store.authorization);
+  const { registeredUserData, registeredUsers } = useAppSelector((store) => store.authorization);
   useEffect(() => {
-    const registeredUserData = localStorage.getItem('registeredUserData');
-    if (registeredUserData) {
-      dispatch(getRegisteredUserData(JSON.parse(registeredUserData)));
+    const registeredUser = localStorage.getItem('registeredUserData');
+    if (registeredUser) {
+      dispatch(getRegisteredUserData(JSON.parse(registeredUser)));
       dispatch(getUsers());
     }
   }, []);
+  if (registeredUserData?.role !== 'ADMIN') return <h1>У Вас нет доступа !</h1>;
   return (
     <div>
-      {registeredUsers && <UserList usersData={registeredUsers} />}
+      {(registeredUserData && registeredUsers) && <UserList usersData={registeredUsers} />}
     </div>
   );
 };

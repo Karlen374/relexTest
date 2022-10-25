@@ -5,7 +5,7 @@ import styles from './testList.module.scss';
 import TestItem from './testItem/testItem';
 
 interface TestListProps{
-  testsData:ITest[]
+  testsData:ITest[];
 }
 
 const TestList = ({ testsData }:TestListProps) => {
@@ -16,7 +16,6 @@ const TestList = ({ testsData }:TestListProps) => {
     delay: 0,
     key: (item:ITest) => item.id,
   });
-
   return (
     <div className={styles.Test_List}>
       <Grid container spacing={3}>

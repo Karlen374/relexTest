@@ -8,6 +8,8 @@ interface AuthorizationState {
   selectedTest: ITest | null;
   questions: IQuestion[] | null;
   testPerformanceModal:boolean;
+  testStartTime: string | null;
+  testAnswers: number[] | null;
 }
 
 const initialState:AuthorizationState = {
@@ -16,6 +18,8 @@ const initialState:AuthorizationState = {
   selectedTest: null,
   questions: null,
   testPerformanceModal: false,
+  testStartTime: null,
+  testAnswers: null,
 };
 
 export const createTest = createAsyncThunk(
@@ -42,12 +46,21 @@ export const changeTestStatus = createAsyncThunk(
     return response;
   },
 );
+export const delTestById = createAsyncThunk(
+  'test/delTestById',
+  async (id:string) => {
+    const { delTest } = useTestServices();
+    const response = await delTest(id);
+    return response;
+  },
+);
 
 const TestSlice = createSlice({
   name: 'test',
   initialState,
   reducers: {
     changeTestModal: (state, action) => {
+      state.questions = null;
       state.createTestModal = action.payload;
     },
     changeTestPerformanceModal: (state, action) => {
@@ -59,6 +72,17 @@ const TestSlice = createSlice({
     },
     clearQuestions: (state) => {
       state.questions = null;
+    },
+    getSelectedTestData: (state, action) => {
+      state.selectedTest = action.payload;
+      state.testStartTime = (String(new Date()));
+      state.testAnswers = action.payload.questions.map((item:IQuestion) => (item.body.correctAnswerId));
+    },
+    clearSelectedTestData: (state) => {
+      state.selectedTest = null;
+    },
+    changeSelectedAnswer: (state, action) => {
+      state.testAnswers = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -75,6 +99,9 @@ const TestSlice = createSlice({
           });
         }
       })
+      .addCase(delTestById.fulfilled, (state, action) => {
+        if (state.tests) state.tests = state.tests?.filter((item) => item.id !== action.payload);
+      })
       .addCase(getAllTests.fulfilled, (state, action) => {
         state.tests = action.payload;
       });
@@ -90,4 +117,7 @@ export const {
   addQuestion,
   clearQuestions,
   changeTestPerformanceModal,
+  getSelectedTestData,
+  clearSelectedTestData,
+  changeSelectedAnswer,
 } = actions;

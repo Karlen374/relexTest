@@ -1,16 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import useAuthorizationServices from 'src/services/useAuthorizationService';
 import { IRegisteredUser } from 'src/types/IRegisteredUsers';
+import { ITestResultData } from 'src/types/ITestResultData';
 import { IUser } from 'src/types/IUser';
 import { IUserSignInData } from 'src/types/IUserSignInData';
 import { IUserSignUpData } from 'src/types/IUserSignUpData';
+
+interface IAlertMessage{
+  text: string;
+  alert: 'error' | 'info' | 'success'| 'warning';
+}
 
 interface AuthorizationState {
   signUpModal:boolean;
   signInModal:boolean;
   registeredUserData:IUser | null;
   registeredUsers:IRegisteredUser[] | null;
-  alertMessage:string
+  alertStatus:boolean;
+  alertMessage:IAlertMessage
 }
 
 const initialState:AuthorizationState = {
@@ -18,7 +25,11 @@ const initialState:AuthorizationState = {
   signInModal: false,
   registeredUserData: null,
   registeredUsers: null,
-  alertMessage: '',
+  alertStatus: false,
+  alertMessage: {
+    text: '',
+    alert: 'success',
+  },
 };
 
 export const signIn = createAsyncThunk(
@@ -45,6 +56,14 @@ export const getUsers = createAsyncThunk(
     return response;
   },
 );
+export const addResult = createAsyncThunk(
+  'authorization/addResult',
+  async (testResult :ITestResultData) => {
+    const { addTestResult } = useAuthorizationServices();
+    const response = await addTestResult(testResult);
+    return response;
+  },
+);
 const AuthorizationSlice = createSlice({
   name: 'authorization',
   initialState,
@@ -63,6 +82,9 @@ const AuthorizationSlice = createSlice({
     closeSignInModal: (state) => {
       state.signInModal = false;
     },
+    closeAlertModal: (state) => {
+      state.alertStatus = false;
+    },
     signOut: (state) => {
       state.registeredUserData = null;
       localStorage.removeItem('registeredUserData');
@@ -78,17 +100,28 @@ const AuthorizationSlice = createSlice({
         state.registeredUserData = action.payload;
         localStorage.setItem('registeredUserData', JSON.stringify(action.payload));
       })
+      .addCase(addResult.fulfilled, (state) => {
+        state.alertStatus = true;
+        state.alertMessage = { text: 'Тест успешно отправлен', alert: 'success' };
+      })
+      .addCase(addResult.rejected, (state) => {
+        state.alertStatus = true;
+        state.alertMessage = { text: 'что то пошло не так перезагрузите страницу', alert: 'error' };
+      })
       .addCase(signIn.rejected, (state) => {
-        state.alertMessage = 'please enter correct data';
+        state.alertStatus = true;
+        state.alertMessage = { text: 'Введен неверный логин или пароль', alert: 'error' };
       })
       .addCase(signUp.fulfilled, (state) => {
-        state.alertMessage = 'registration completed successfully';
+        state.alertStatus = true;
+        state.alertMessage = { text: 'Регистрация прошла успешно ', alert: 'success' };
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.registeredUsers = action.payload;
       })
       .addCase(signUp.rejected, (state) => {
-        state.alertMessage = 'please enter correct data';
+        state.alertStatus = true;
+        state.alertMessage = { text: 'что то пошло не так', alert: 'error' };
       });
   },
 });
@@ -104,4 +137,5 @@ export const {
   closeSignInModal,
   signOut,
   getRegisteredUserData,
+  closeAlertModal,
 } = actions;

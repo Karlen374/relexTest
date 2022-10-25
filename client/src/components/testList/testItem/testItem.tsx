@@ -4,8 +4,13 @@ import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useAppDispatch } from 'src/hooks/hooks';
-import { changeTestPerformanceModal, changeTestStatus } from 'src/store/slices/testSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks/hooks';
+import {
+  changeTestPerformanceModal,
+  changeTestStatus,
+  delTestById,
+  getSelectedTestData,
+} from 'src/store/slices/testSlice';
 import styles from './testItem.module.scss';
 
 interface TestItemProps{
@@ -14,9 +19,54 @@ interface TestItemProps{
 
 const TestItem = ({ testData }:TestItemProps) => {
   const dispatch = useAppDispatch();
+  const { registeredUserData } = useAppSelector((store) => store.authorization);
   const handleChange = () => {
     dispatch(changeTestStatus(testData.id));
   };
+  const startTest = () => {
+    dispatch(changeTestPerformanceModal(true));
+    dispatch(getSelectedTestData(testData));
+  };
+  const delTest = () => {
+    dispatch(delTestById(testData.id));
+  };
+  const startButton = (testData.status === true)
+    ? (
+      <Button
+        variant="contained"
+        color="success"
+        onClick={startTest}
+      >
+        Начать тест
+      </Button>
+    )
+    : (
+      <Button
+        variant="contained"
+        color="error"
+        disabled
+      >
+        Тест заблокирован
+      </Button>
+    );
+  const testButton = (registeredUserData?.role === 'ADMIN')
+    ? (
+      <>
+        <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
+          <Typography>отключить</Typography>
+          <Switch
+            checked={testData.status}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+          <Typography>включить</Typography>
+        </Stack>
+        <Button variant="contained" color="error" onClick={delTest}>
+          Удалить тест
+        </Button>
+      </>
+    ) : startButton;
+
   return (
     <div className={styles.testItem}>
       <h1>
@@ -29,22 +79,7 @@ const TestItem = ({ testData }:TestItemProps) => {
         {' '}
         {testData.questions.length}
       </h5>
-      <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
-        <Typography>отключить</Typography>
-        <Switch
-          checked={testData.status}
-          onChange={handleChange}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <Typography>включить</Typography>
-      </Stack>
-      <Button
-        variant="contained"
-        color="success"
-        onClick={() => dispatch(changeTestPerformanceModal(true))}
-      >
-        Начать тест
-      </Button>
+      {testButton}
     </div>
   );
 };
