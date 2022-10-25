@@ -7,7 +7,6 @@ interface UserItemProps{
   userData:IRegisteredUser;
 }
 const UserItem = ({ userData }:UserItemProps) => {
-  console.log(userData);
   return (
     <div className={styles.userItem}>
       <h3>
