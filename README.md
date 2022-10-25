@@ -11,6 +11,8 @@
 Чтобы создать обычный аккаунт просто надо зарегистрироваться
 
 ТЕХНОЛОГИИ:
+
 Frontend:React+Redux+TS
+
 Backend:Node.js + MongoDb
 
